@@ -1,0 +1,37 @@
+# Dependencies
+/vendor/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+error_log
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
+
+# Composer
+composer.phar
+composer.lock
+
+# Database
+*.sql.gz
+*.sql.bak
+
+# Uploads (if any)
+uploads/

@@ -1,0 +1,39 @@
+<?php
+// General Configuration
+// ⚠️ IMPORTANT: Copy this file to config.php
+//
+// Steps:
+// 1. Copy: cp config/config.php.example config/config.php
+// 2. No need to edit APP_URL - it auto-detects based on your server configuration!
+
+define('APP_NAME', 'GACS Dashboard');
+
+// Auto-detect APP_URL based on server configuration
+// This makes the application work on any domain without configuration!
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$scriptPath = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+define('APP_URL', $protocol . '://' . $host . $scriptPath);
+define('ASSETS_URL', APP_URL . '/assets');
+
+// Session Configuration
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_strict_mode', 1);
+session_start();
+
+// Timezone (adjust to your timezone)
+date_default_timezone_set('Asia/Jakarta');
+
+// Error Reporting (set to 0 in production)
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Disabled to prevent breaking JSON responses
+ini_set('log_errors', 1);
+
+// Autoload Composer
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load Database Config
+require_once __DIR__ . '/database.php';
+
+// Helper Functions
+require_once __DIR__ . '/../lib/helpers.php';

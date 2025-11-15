@@ -1,0 +1,30 @@
+<?php
+// Database Configuration
+// ⚠️ IMPORTANT: Copy this file to database.php and update with your credentials
+//
+// Steps:
+// 1. Copy: cp config/database.php.example config/database.php
+// 2. Edit: nano config/database.php
+// 3. Update DB_HOST, DB_USER, DB_PASS, DB_NAME with your values
+
+define('DB_HOST', 'localhost');
+define('DB_USER', 'your_database_user');
+define('DB_PASS', 'your_database_password');
+define('DB_NAME', 'your_database_name');
+
+// Create database connection
+function getDBConnection() {
+    static $conn = null;
+
+    if ($conn === null) {
+        $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        $conn->set_charset("utf8mb4");
+    }
+
+    return $conn;
+}

@@ -1,0 +1,563 @@
+#map {
+    height: 600px;
+    width: 100%;
+}
+
+/* Custom Marker Styling */
+.custom-marker {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-marker:hover .marker-icon {
+    transform: rotate(-45deg) scale(1.15);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4) !important;
+}
+
+/* Pulse animation for online markers */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.7;
+    }
+}
+
+.pulse-online {
+    animation: marker-bounce 0.5s ease-out;
+}
+
+@keyframes marker-bounce {
+    0% {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(5px);
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Status indicator pulse */
+@keyframes status-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+}
+
+.status-indicator {
+    animation: status-pulse 2s infinite !important;
+}
+
+/* Animated polyline for connections - Enhanced */
+@keyframes dash-flow-online {
+    0% {
+        stroke-dashoffset: 72;
+        opacity: 0.9;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0.9;
+    }
+}
+
+@keyframes dash-flow-offline {
+    0% {
+        stroke-dashoffset: 72;
+        opacity: 0.7;
+    }
+    25% {
+        opacity: 0.9;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    75% {
+        opacity: 0.9;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0.7;
+    }
+}
+
+@keyframes pulse-glow-online {
+    0%, 100% {
+        filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.6));
+    }
+    50% {
+        filter: drop-shadow(0 0 6px rgba(16, 185, 129, 1)) drop-shadow(0 0 12px rgba(16, 185, 129, 0.5));
+    }
+}
+
+@keyframes pulse-glow-offline {
+    0%, 100% {
+        filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.6));
+    }
+    50% {
+        filter: drop-shadow(0 0 6px rgba(239, 68, 68, 1)) drop-shadow(0 0 12px rgba(239, 68, 68, 0.5));
+    }
+}
+
+/* Leaflet.Editable - Vertex markers (titik edit polyline) - MEGA ULTRA VISIBLE */
+.leaflet-vertex-icon,
+.leaflet-marker-icon.leaflet-vertex-icon,
+.leaflet-div-icon.leaflet-vertex-icon,
+.leaflet-editing-icon.leaflet-vertex-icon,
+.leaflet-marker-icon.leaflet-div-icon.leaflet-editing-icon.leaflet-vertex-icon,
+div.leaflet-vertex-icon,
+.leaflet-marker-pane .leaflet-vertex-icon,
+.leaflet-overlay-pane .leaflet-vertex-icon {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+    margin-left: -15px !important;
+    margin-top: -15px !important;
+    background: #3B82F6 !important;
+    background-color: #3B82F6 !important;
+    border: 5px solid #fff !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 0 3px #3B82F6, 0 0 0 6px rgba(255,255,255,0.8), 0 4px 15px rgba(0,0,0,0.6) !important;
+    cursor: move !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 999999 !important;
+    position: absolute !important;
+    transform-origin: center center !important;
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    clip: auto !important;
+    clip-path: none !important;
+    overflow: visible !important;
+}
+
+.leaflet-vertex-icon:hover {
+    z-index: 1000000 !important;
+    animation: none !important;
+    background: #60A5FA !important;
+    box-shadow: 0 0 0 4px #3B82F6, 0 0 0 8px rgba(59, 130, 246, 0.4), 0 6px 20px rgba(0,0,0,0.7) !important;
+}
+
+/* Middle marker (titik tengah untuk menambah vertex baru) - SUPER VISIBLE */
+.leaflet-middle-icon,
+.leaflet-marker-icon.leaflet-middle-icon,
+.leaflet-div-icon.leaflet-middle-icon,
+.leaflet-editing-icon.leaflet-middle-icon,
+.leaflet-marker-icon.leaflet-div-icon.leaflet-editing-icon.leaflet-middle-icon,
+div.leaflet-middle-icon {
+    width: 22px !important;
+    height: 22px !important;
+    margin-left: -11px !important;
+    margin-top: -11px !important;
+    cursor: crosshair !important;
+    display: block !important;
+    opacity: 0.9 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 99999 !important;
+    position: absolute !important;
+    transform-origin: center center !important;
+}
+
+/* Inner circle untuk middle marker - KUNING TERANG */
+.leaflet-middle-icon > div {
+    width: 22px !important;
+    height: 22px !important;
+    background: #FBBF24 !important;
+    border: 4px solid #fff !important;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.5) !important;
+}
+
+.leaflet-middle-icon:hover {
+    opacity: 1 !important;
+    z-index: 100000 !important;
+    background: #F59E0B !important;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.8), 0 0 0 3px rgba(251, 191, 36, 0.3) !important;
+}
+
+.leaflet-middle-icon:hover > div {
+    background: #F59E0B !important;
+}
+
+/* Apply animation to main connection lines */
+.connection-online,
+.connection-online > *,
+path.connection-online,
+svg .connection-online {
+    animation: dash-flow-online 1.5s linear infinite, pulse-glow-online 2s ease-in-out infinite !important;
+}
+
+.connection-offline,
+.connection-offline > *,
+path.connection-offline,
+svg .connection-offline {
+    animation: dash-flow-offline 1s linear infinite, pulse-glow-offline 1.5s ease-in-out infinite !important;
+}
+
+/* Legacy - keep for backward compatibility */
+
+/* Shadow layer styling */
+.connection-shadow-online,
+.connection-shadow-offline,
+.connection-shadow-unknown {
+    pointer-events: none;
+}
+
+/* Border layer styling */
+.connection-border-online,
+.connection-border-offline,
+.connection-border-unknown {
+    pointer-events: none;
+}
+
+/* Leaflet popup customization */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.leaflet-popup-tip {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Badge styling in popup */
+.badge.online {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge.offline {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Location Pointer Animation */
+@keyframes pointer-pulse {
+    0%, 100% {
+        transform: rotate(-45deg) scale(1);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+    }
+    50% {
+        transform: rotate(-45deg) scale(1.05);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.7), 0 0 0 10px rgba(102, 126, 234, 0.2);
+    }
+}
+
+.location-pointer {
+    transition: all 0.3s ease;
+    cursor: move;
+}
+
+.location-pointer:hover {
+    transform: scale(1.1);
+}
+
+/* Context Menu Styling */
+.context-menu {
+    padding: 4px 0;
+    font-size: 14px;
+    z-index: 2147483645;
+}
+
+.context-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.context-menu-item:hover {
+    background: #f0f0f0;
+}
+
+.context-menu-item i {
+    margin-right: 8px;
+    width: 16px;
+    display: inline-block;
+}
+
+/* Editable Polyline Styling */
+.leaflet-editable-polyline {
+    cursor: pointer;
+}
+
+.leaflet-editable-polyline:hover {
+    opacity: 1 !important;
+    filter: brightness(1.2);
+}
+
+/* Waypoint Markers */
+.waypoint-marker {
+    background: #667eea;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    cursor: move;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.waypoint-marker:hover {
+    background: #764ba2;
+    transform: scale(1.3);
+}
+
+/* Modal Backdrop & Content Styling */
+.modal-backdrop {
+    display: none !important;
+}
+
+.modal-backdrop.show {
+    display: none !important;
+}
+
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out !important;
+}
+
+.modal.show .modal-dialog {
+    transform: none !important;
+}
+
+.modal-dialog {
+    margin: 2rem auto !important;
+    max-width: 540px !important;
+    display: flex !important;
+    align-items: center !important;
+    min-height: calc(100vh - 4rem) !important;
+}
+
+.modal-content {
+    border-radius: 16px !important;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.05),
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        0 25px 65px rgba(0, 0, 0, 0.4) !important;
+    border: none !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    position: relative !important;
+}
+
+.modal-header {
+    /* Use global modal header styles from style.css */
+}
+
+.modal-header .modal-title {
+    /* Use global modal title styles from style.css */
+}
+
+.modal-header .btn-close {
+    /* Use global btn-close styles */
+}
+
+.modal-header .btn-close:hover {
+    /* Use global btn-close hover styles */
+}
+
+.modal-body {
+    padding: 1.5rem !important;
+    max-height: 65vh;
+    overflow-y: auto;
+    background: white;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.modal-footer {
+    border-top: 1px solid #e5e7eb !important;
+    padding: 1rem 1.5rem !important;
+    background-color: #f9fafb !important;
+}
+
+/* Form Group Spacing */
+.modal-body .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.modal-body .form-group label {
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.modal-body .form-control {
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    padding: 0.625rem 0.875rem;
+    transition: all 0.2s;
+}
+
+.modal-body .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.modal-body .alert {
+    border-radius: 10px;
+    border: none;
+}
+
+.modal-body .alert-info {
+    background-color: #eff6ff;
+    color: #1e40af;
+}
+
+.modal-body .card {
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.modal-body .card-header {
+    border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Fullscreen Styling */
+#map-container-fullscreen:fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #f8f9fa;
+}
+
+#map-container-fullscreen:fullscreen .card {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#map-container-fullscreen:fullscreen #map-card {
+    height: calc(100vh - 80px) !important;
+}
+
+#map-container-fullscreen:fullscreen #map-card .card-body {
+    padding: 0 !important;
+    height: 100% !important;
+}
+
+#map-container-fullscreen:fullscreen #map {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* Webkit/Safari fullscreen support */
+#map-container-fullscreen:-webkit-full-screen {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #f8f9fa;
+}
+
+#map-container-fullscreen:-webkit-full-screen .card {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#map-container-fullscreen:-webkit-full-screen #map-card {
+    height: calc(100vh - 80px) !important;
+}
+
+#map-container-fullscreen:-webkit-full-screen #map-card .card-body {
+    padding: 0 !important;
+    height: 100% !important;
+}
+
+#map-container-fullscreen:-webkit-full-screen #map {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* Mozilla fullscreen support */
+#map-container-fullscreen:-moz-full-screen {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #f8f9fa;
+}
+
+#map-container-fullscreen:-moz-full-screen .card {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#map-container-fullscreen:-moz-full-screen #map-card {
+    height: calc(100vh - 80px) !important;
+}
+
+#map-container-fullscreen:-moz-full-screen #map-card .card-body {
+    padding: 0 !important;
+    height: 100% !important;
+}
+
+#map-container-fullscreen:-moz-full-screen #map {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+/* Modal positioning in fullscreen mode */
+/* Modals are moved into fullscreen container via JavaScript */
+/* This ensures they appear above fullscreen content */
+#map-container-fullscreen .modal {
+    position: fixed !important;
+    z-index: 10000 !important;
+}
+
+#map-container-fullscreen .modal-backdrop {
+    position: fixed !important;
+    z-index: 9999 !important;
+}

@@ -1,0 +1,14 @@
+{
+    "name": "mostech/gacs-dashboard",
+    "description": "GACS Dashboard - GenieACS API Visualization Dashboard",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "evilfreelancer/routeros-api-php": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "lib/"
+        }
+    }
+}
