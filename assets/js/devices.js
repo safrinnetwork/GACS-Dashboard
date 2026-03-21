@@ -40,6 +40,11 @@ async function loadDevices(isAutoRefresh = false) {
         hasMore = firstChunk.hasMore;
         skip += chunkSize;
 
+        // Store map items for infrastructure tabs
+        if (mapItemsResult && mapItemsResult.success) {
+            allMapItems = mapItemsResult.items || [];
+        }
+
         // Update UI with first chunk immediately
         if (!isAutoRefresh) {
             tbody.innerHTML = '<tr><td colspan="12" class="text-center"><div class="spinner"></div><div style="margin-top: 10px;">Loading devices... (' + allDevices.length + ' loaded)</div></td></tr>';

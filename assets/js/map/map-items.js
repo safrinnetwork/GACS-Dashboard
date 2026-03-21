@@ -949,7 +949,23 @@ async function updateEditItemForm(item) {
             `;
             break;
         case 'odc':
+            // Load servers for parent assignment
+            const serversResultOdc = await fetchAPI('/api/map-get-items.php');
+            const allServersOdc = serversResultOdc?.success ? serversResultOdc.items.filter(i => i.item_type === 'server') : [];
+            let serverOptionsOdc = '<option value="">No Parent (Standalone)</option>';
+            allServersOdc.forEach(s => {
+                const selected = item.config?.server_id == s.id ? 'selected' : '';
+                serverOptionsOdc += `<option value="${s.id}" ${selected}>${s.name}</option>`;
+            });
+
             dynamicFields.innerHTML = `
+                <div class="form-group">
+                    <label>Parent Server</label>
+                    <select name="server_id" class="form-control">
+                        ${serverOptionsOdc}
+                    </select>
+                    <small class="text-muted">Assign ODC ke Server ini</small>
+                </div>
                 <div class="form-group">
                     <label>Port Count</label>
                     <input type="number" name="port_count" class="form-control" value="${item.config?.port_count || 4}" required>
@@ -957,7 +973,23 @@ async function updateEditItemForm(item) {
             `;
             break;
         case 'odp':
+            // Load ODCs for parent assignment
+            const itemsResultOdp = await fetchAPI('/api/map-get-items.php');
+            const allOdcs = itemsResultOdp?.success ? itemsResultOdp.items.filter(i => i.item_type === 'odc') : [];
+            let odcOptionsOdp = '<option value="">No Parent</option>';
+            allOdcs.forEach(o => {
+                const selected = item.parent_id == o.id ? 'selected' : '';
+                odcOptionsOdp += `<option value="${o.id}" ${selected}>${o.name}</option>`;
+            });
+
             dynamicFields.innerHTML = `
+                <div class="form-group">
+                    <label>Parent ODC</label>
+                    <select name="parent_id" class="form-control">
+                        ${odcOptionsOdp}
+                    </select>
+                    <small class="text-muted">Assign ODP ke ODC ini</small>
+                </div>
                 <div class="form-group">
                     <label>ODC Port</label>
                     <input type="number" name="odc_port" class="form-control" value="${item.config?.odc_port || ''}" min="1" placeholder="Nomor port di ODC">
@@ -1015,7 +1047,9 @@ async function updateItem() {
         bootstrap.Modal.getInstance(document.getElementById('editItemModal')).hide();
         loadMap();
     } else {
-        showToast(result.message || 'Gagal mengupdate item', 'danger');
+        const errMsg = (result && result.message) ? result.message : 'Gagal mengupdate item. Cek koneksi server.';
+        showToast(errMsg, 'danger');
+        console.error('updateItem error:', result);
     }
 }
 
