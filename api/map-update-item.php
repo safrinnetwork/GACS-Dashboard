@@ -68,9 +68,16 @@ switch ($itemType) {
 
     case 'odc':
         $portCount = $data['port_count'] ?? 4;
+        $serverId = !empty($data['server_id']) ? (int)$data['server_id'] : null;
 
-        $stmt = $conn->prepare("UPDATE odc_config SET port_count = ? WHERE map_item_id = ?");
-        $stmt->bind_param("ii", $portCount, $itemId);
+        // Update port_count in odc_config
+        $stmt = $conn->prepare("UPDATE odc_config SET port_count = ?, server_id = ? WHERE map_item_id = ?");
+        $stmt->bind_param("iii", $portCount, $serverId, $itemId);
+        $stmt->execute();
+
+        // Update parent_id in map_items
+        $stmt = $conn->prepare("UPDATE map_items SET parent_id = ? WHERE id = ?");
+        $stmt->bind_param("ii", $serverId, $itemId);
         $stmt->execute();
         break;
 
@@ -84,6 +91,12 @@ switch ($itemType) {
         $useSecondarySplitter = $data['use_secondary_splitter'] ?? 0;
         $secondarySplitterRatio = $data['secondary_splitter_ratio'] ?? null;
         $customSecondaryRatioOutputPort = $data['custom_secondary_ratio_output_port'] ?? null;
+        $parentId = !empty($data['parent_id']) ? (int)$data['parent_id'] : null;
+
+        // Update parent_id in map_items
+        $stmtParent = $conn->prepare("UPDATE map_items SET parent_id = ? WHERE id = ?");
+        $stmtParent->bind_param("ii", $parentId, $itemId);
+        $stmtParent->execute();
 
         // Recalculate power based on updated splitter configuration
         $calculator = new PONCalculator();
@@ -109,7 +122,7 @@ switch ($itemType) {
         }
 
         $stmt = $conn->prepare("UPDATE odp_config SET port_count = ?, odc_port = ?, parent_odp_port = ?, use_splitter = ?, splitter_ratio = ?, custom_ratio_output_port = ?, use_secondary_splitter = ?, secondary_splitter_ratio = ?, custom_secondary_ratio_output_port = ?, calculated_power = ? WHERE map_item_id = ?");
-        $stmt->bind_param("iisississsdi", $portCount, $odcPort, $parentOdpPort, $useSplitter, $splitterRatio, $customRatioOutputPort, $useSecondarySplitter, $secondarySplitterRatio, $customSecondaryRatioOutputPort, $calculatedPower, $itemId);
+        $stmt->bind_param("iisisssssdi", $portCount, $odcPort, $parentOdpPort, $useSplitter, $splitterRatio, $customRatioOutputPort, $useSecondarySplitter, $secondarySplitterRatio, $customSecondaryRatioOutputPort, $calculatedPower, $itemId);
         $stmt->execute();
         break;
 

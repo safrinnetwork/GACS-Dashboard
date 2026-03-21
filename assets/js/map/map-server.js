@@ -282,13 +282,30 @@ async function manageServerLinks(itemId) {
     const config = item.config || {};
     const ponPorts = config.pon_ports || {};
 
-    // Load netwatch data for ISP and OLT links
+    // Load netwatch data for ISP links
     const netwatchResult = await fetchAPI('/api/map-get-netwatch.php');
     let netwatchOptions = '<option value="">No Link</option>';
     if (netwatchResult && netwatchResult.success && netwatchResult.netwatch) {
         netwatchResult.netwatch.forEach(nw => {
             netwatchOptions += `<option value="${nw.host}">${nw.host} - ${nw.comment || 'No comment'}</option>`;
         });
+    }
+
+    // Load OLT options from map items
+    const mapItemsResult = await fetchAPI('/api/map-get-items.php');
+    let oltOptions = '<option value="">No Link</option>';
+    if (mapItemsResult && mapItemsResult.success && mapItemsResult.items) {
+        const oltItems = mapItemsResult.items.filter(i => i.item_type === 'olt');
+        oltItems.forEach(olt => {
+            const oltUrl = olt.properties?.olt_link || olt.name;
+            oltOptions += `<option value="${oltUrl}">${olt.name} - ${oltUrl}</option>`;
+        });
+        // Also add from netwatch as fallback
+        if (netwatchResult && netwatchResult.success && netwatchResult.netwatch) {
+            netwatchResult.netwatch.forEach(nw => {
+                oltOptions += `<option value="${nw.host}">${nw.host} - ${nw.comment || 'No comment'}</option>`;
+            });
+        }
     }
 
     // Load GenieACS devices for MikroTik
@@ -308,7 +325,7 @@ async function manageServerLinks(itemId) {
 
     document.getElementById('isp-link-select').innerHTML = netwatchOptions;
     document.getElementById('mikrotik-device-select').innerHTML = genieacsOptions;
-    document.getElementById('olt-link-select').innerHTML = netwatchOptions;
+    document.getElementById('olt-link-select').innerHTML = oltOptions;
 
     // Set current values
     if (properties.isp_link) {
